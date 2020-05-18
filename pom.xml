@@ -490,6 +490,54 @@
                 </plugins>
             </reporting>
         </profile>
+	<profile>
+        <id>docker</id>
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.22.1</version>
+                    <configuration>
+                        <images>
+                            <image>
+                                <name>DevOpsClassCodes:latest</name>
+                                <build>
+                                    <from>openjdk:latest</from>
+                                    <assembly>
+                                        <descriptorRef>artifact</descriptorRef>
+                                    </assembly>
+                                    <cmd>java -cp maven/${project.name}-${project.version}.jar com.addressbook.tutorial.addressbook</cmd>
+                                </build>
+                                <run>
+                                    <wait>
+                                        <log>Hello World!</log>
+                                    </wait>
+                                </run>
+                            </image>
+                        </images>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>docker:build</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>docker:start</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>start</goal>
+                                <goal>logs</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>	      
     </profiles>
 
 </project>
